@@ -22,6 +22,11 @@ public class FooterView extends FrameLayout {
         pull_to_refresh_footer_progress.setVisibility(GONE);
     }
 
+    public void reset(){
+        pull_to_refresh_footer_progress.setVisibility(GONE);
+        pull_to_refresh_footer_text.setText("上拉加载更多");
+    }
+
     public void onLoading(){
         pull_to_refresh_footer_progress.setVisibility(VISIBLE);
         pull_to_refresh_footer_text.setText("更多加载中");

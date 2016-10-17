@@ -15,8 +15,6 @@ import com.tone.library.refreshview.PullToRefreshView;
 
 import java.util.ArrayList;
 
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.L;
-
 public class RecyclerViewActivity extends AppCompatActivity {
 
     private PullToRefreshView pullToRefreshView;

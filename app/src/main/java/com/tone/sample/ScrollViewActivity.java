@@ -27,6 +27,7 @@ public class ScrollViewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scrollview);
         pullToRefreshView = (PullToRefreshView) findViewById(R.id.pulltorefreshview);
+        pullToRefreshView.setCanLoad(false);
         pullToRefreshView.setOnRefreshListener(new PullToRefreshView.onRefreshListener() {
             @Override
             public void onRefresh() {

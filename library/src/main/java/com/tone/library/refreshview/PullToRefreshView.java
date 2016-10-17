@@ -327,6 +327,7 @@ public class PullToRefreshView extends FrameLayout {
             case IDLE:
                 smoothSlideTo(0);
                 headerView.reset();
+                footerView.reset();
                 break;
             case PULL_TO_REFRESH:
                 headerView.onPullToRefresh();
