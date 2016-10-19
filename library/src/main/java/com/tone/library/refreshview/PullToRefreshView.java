@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import com.tone.library.refreshview.FooterView;
+import com.tone.library.refreshview.HeaderView;
+
 /**
  * Created by zhaotong on 2016/10/9.
  */
@@ -85,14 +88,14 @@ public class PullToRefreshView extends FrameLayout {
             }
 
             if (isTop(scrollView) && canRefresh) {
-                if (top < (refreshHeight)) {
+                if (top < refreshHeight) {
                     //下拉刷新
                     if (currentState == State.IDLE || currentState == State.RELEASE_TO_REFRESH) {
                         setState(State.PULL_TO_REFRESH);
                     }
                 } else {
                     //释放刷新
-                    if (currentState == State.PULL_TO_REFRESH) {
+                    if (currentState == State.IDLE ||currentState == State.PULL_TO_REFRESH) {
                         setState(State.RELEASE_TO_REFRESH);
                     }
                 }
@@ -127,20 +130,23 @@ public class PullToRefreshView extends FrameLayout {
         @Override
         public void onViewReleased(View releasedChild, float xvel, float yvel) {
             if (isTop(scrollView) && canRefresh) {
-                if (currentState == State.RELEASE_TO_REFRESH || currentState == State.PULL_TO_REFRESH) {
+
+                if (currentState == State.REFRESHING) {
+                    if (currentTop < headerHeight) {
+                        setState(State.IDLE);
+                    } else {
+                        smoothSlideTo(headerHeight);
+                        headerView.onRefresh();
+                    }
+                }
+                if (currentState == State.RELEASE_TO_REFRESH || currentState == State.PULL_TO_REFRESH ) {
                     if (currentTop < refreshHeight) {
                         setState(State.IDLE);
                     } else {
                         setState(State.REFRESHING);
                     }
                 }
-                if (currentState == State.REFRESHING) {
-                    if (currentTop < headerHeight) {
-                        setState(State.IDLE);
-                    } else {
-                        setState(State.REFRESHING);
-                    }
-                }
+
             }
             if (isBottom(scrollView) && canLoad) {
                 if (currentState == State.LOADING) {
@@ -188,9 +194,9 @@ public class PullToRefreshView extends FrameLayout {
         headerHeight = headerView.getMeasuredHeight();
         footerHeight = footerView.getMeasuredHeight();
         maxDragValue = headerHeight * 4;
-        refreshHeight = (int) (headerHeight * 1.5);
+        refreshHeight = headerHeight;
         setMeasuredDimension(widthMeasureSpec, heightMeasureSpec);
-      }
+    }
 
 
     @Override
@@ -212,10 +218,10 @@ public class PullToRefreshView extends FrameLayout {
             return super.dispatchTouchEvent(event);
         }
         final int action = MotionEventCompat.getActionMasked(event);
-        if (currentState == State.REFRESHING) {
-            viewDragHelper.processTouchEvent(event);
-            return true;
-        }
+//        if (currentState == State.REFRESHING) {
+//            viewDragHelper.processTouchEvent(event);
+//            return true;
+//        }
         switch (action) {
             case MotionEvent.ACTION_DOWN:
                 initY = event.getRawY();
@@ -353,6 +359,10 @@ public class PullToRefreshView extends FrameLayout {
         }
     }
 
+
+    public void setRefresh(){
+        setState(State.REFRESHING);
+    }
 
     public interface onRefreshListener {
         void onRefresh();

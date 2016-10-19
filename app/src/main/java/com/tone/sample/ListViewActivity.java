@@ -51,7 +51,7 @@ public class ListViewActivity extends AppCompatActivity {
         pullToRefreshView.setOnRefreshListener(new PullToRefreshView.onRefreshListener() {
             @Override
             public void onRefresh() {
-                handler.sendEmptyMessageDelayed(1,3000);
+                handler.sendEmptyMessageDelayed(1,5000);
             }
 
             @Override
